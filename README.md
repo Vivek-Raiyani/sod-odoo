@@ -1,7 +1,7 @@
 # sod-odoo
 Odoo hackathon repo
 
-Team name:
+Team name: Team 4154
 
 E-mail: vivek16903@gmail.com 
 
