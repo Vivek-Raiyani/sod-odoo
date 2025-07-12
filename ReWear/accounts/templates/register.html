@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Distinct Jellyfish</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-circle::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background: #4ade80;
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+
+        .page-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .brand-name {
+            color: #4ade80;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #888;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 12px;
+            color: #888;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            border-color: #4ade80;
+            color: #4ade80;
+        }
+
+        .file-input-label.has-file {
+            color: #4ade80;
+            border-color: #4ade80;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background: #4ade80;
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .register-btn:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #4ade80;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-link a {
+            color: #4ade80;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #22c55e;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .name-row .form-group {
+            flex: 1;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .page-title {
+                font-size: 20px;
+            }
+            
+            .brand-name {
+                font-size: 16px;
+            }
+
+            .name-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo-circle"></div>
+            <h1 class="page-title">Register Page</h1>
+            <div class="brand-name">Distinct Jellyfish</div>
+        </div>
+
+        <!-- Django form starts here -->
+        <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Display form errors -->
+            {% if form.errors %}
+                <div class="error-message">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- First Name and Last Name in one row -->
+            <div class="name-row">
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        class="form-input" 
+                        placeholder="First Name"
+                        value="{{ form.first_name.value|default:'' }}"
+                        required
+                        autocomplete="given-name"
+                    >
+                </div>
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        class="form-input" 
+                        placeholder="Last Name"
+                        value="{{ form.last_name.value|default:'' }}"
+                        required
+                        autocomplete="family-name"
+                    >
+                </div>
+            </div>
+
+            <!-- Email field -->
+            <div class="form-group">
+                <input 
+                    type="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Email Address"
+                    value="{{ form.email.value|default:'' }}"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <!-- Profile Picture field -->
+            <div class="form-group">
+                <div class="file-input-wrapper">
+                    <input 
+                        type="file" 
+                        name="profile" 
+                        id="profile-input"
+                        accept="image/*"
+                    >
+                    <label for="profile-input" class="file-input-label" id="profile-label">
+                        📷 Choose Profile Picture (Optional)
+                    </label>
+                </div>
+            </div>
+
+            <!-- Password field -->
+            <div class="form-group">
+                <input 
+                    type="password" 
+                    name="password1" 
+                    class="form-input" 
+                    placeholder="Password"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <!-- Confirm Password field -->
+            <div class="form-group">
+                <input 
+                    type="password" 
+                    name="password2" 
+                    class="form-input" 
+                    placeholder="Confirm Password"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <!-- Register button -->
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+
+        <!-- Login link -->
+        <div class="login-link">
+            <a href="{% url 'login' %}">Already have an account? Login here</a>
+        </div>
+    </div>
+
+    <div class="watermark">xyz</div>
+
+    <script>
+        // Handle file input display
+        document.getElementById('profile-input').addEventListener('change', function(e) {
+            const label = document.getElementById('profile-label');
+            const file = e.target.files[0];
+            
+            if (file) {
+                label.textContent = `📷 ${file.name}`;
+                label.classList.add('has-file');
+            } else {
+                label.textContent = '📷 Choose Profile Picture (Optional)';
+                label.classList.remove('has-file');
+            }
+        });
+    </script>
+</body>
+</html>

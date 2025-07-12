@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - {{ user.first_name }} {{ user.last_name }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .container-fluid {
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header-section {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .page-title {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .user-profile-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile-icon i {
+            color: #4ade80;
+            font-size: 24px;
+        }
+
+        .notifications-btn {
+            background: #4ade80;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            padding: 8px 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notifications-btn:hover {
+            background: #22c55e;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+            color: #fff;
+        }
+
+        .search-input::placeholder {
+            color: #888;
+        }
+
+        .search-btn {
+            background: #4ade80;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #22c55e;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-image.placeholder {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        }
+
+        .profile-image.placeholder i {
+            font-size: 60px;
+            color: #666;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-field {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            color: #fff;
+            font-size: 16px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-field.large {
+            min-height: 100px;
+            align-items: flex-start;
+            padding-top: 15px;
+        }
+
+        .profile-field:empty::before {
+            content: 'Profile information will appear here';
+            color: #666;
+            font-style: italic;
+        }
+
+        .profile-actions {
+            margin-top: 20px;
+        }
+
+        .btn-edit-profile {
+            background: #4ade80;
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-edit-profile:hover {
+            background: #22c55e;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* Listings and Purchases Sections */
+        .listings-section, .purchases-section {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #4ade80;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .item-card:hover {
+            border-color: #4ade80;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(74, 222, 128, 0.2);
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-card.placeholder {
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        }
+
+        .item-card.placeholder i {
+            font-size: 40px;
+            color: #666;
+        }
+
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: #fff;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .item-card:hover .item-overlay {
+            transform: translateY(0);
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            font-size: 12px;
+            color: #4ade80;
+        }
+
+        .add-listing-btn {
+            background: rgba(74, 222, 128, 0.1);
+            border: 2px dashed #4ade80;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #4ade80;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .add-listing-btn:hover {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            transform: translateY(-5px);
+        }
+
+        .add-listing-btn i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .stats-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat-item {
+            color: #fff;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .profile-section .row {
+                flex-direction: column;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 120px;
+                margin: 0 auto 20px;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="page-title">User Dashboard</h1>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex align-items-center justify-content-end gap-3">
+                        <a href="" class="notifications-btn">
+                            <i class="bi bi-bell"></i>
+                            Notifications
+                        </a>
+                        <div class="user-profile-icon">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <form method="GET" action="">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        class="form-control search-input" 
+                        name="q"
+                        placeholder="Search your items..."
+                        value="{{ request.GET.q|default:'' }}"
+                    >
+                    <button class="btn search-btn" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-image {% if not user.profile %}placeholder{% endif %}">
+                        {% if user.profile %}
+                            <img src="{{ user.profile.url }}" alt="{{ user.first_name }} {{ user.last_name }}">
+                        {% else %}
+                            <i class="bi bi-person-fill"></i>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="profile-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    {{ user.first_name|default:"First Name" }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    {{ user.last_name|default:"Last Name" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    {{ user.email|default:"Email Address" }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-field">
+                                    Points: {{ user.points|default:"0" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="profile-field large">
+                                    {% if user.bio %}
+                                        {{ user.bio }}
+                                    {% else %}
+                                        Add a bio to tell others about yourself...
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="" class="btn-edit-profile">
+                                <i class="bi bi-pencil"></i>
+                                Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">{{ user_stats.total_listings|default:"0" }}</div>
+                <div class="stat-label">Total Listings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ user_stats.active_listings|default:"0" }}</div>
+                <div class="stat-label">Active Listings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ user_stats.total_sales|default:"0" }}</div>
+                <div class="stat-label">Total Sales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ user_stats.total_purchases|default:"0" }}</div>
+                <div class="stat-label">Total Purchases</div>
+            </div>
+        </div>
+
+        <!-- My Listings Section -->
+        <div class="listings-section">
+            <h2 class="section-title">
+                <i class="bi bi-grid"></i>
+                My Listings
+            </h2>
+            <div class="items-grid">
+                <!-- Add New Listing Button -->
+                <a href="" class="add-listing-btn">
+                    <i class="bi bi-plus-circle"></i>
+                    Add New Listing
+                </a>
+                
+                {% for listing in user_listings %}
+                    <div class="item-card" onclick="window.location.href=''">
+                        {% if listing.image %}
+                            <img src="{{ listing.image.url }}" alt="{{ listing.name }}">
+                        {% else %}
+                            <i class="bi bi-image"></i>
+                        {% endif %}
+                        <div class="item-overlay">
+                            <div class="item-title">{{ listing.name }}</div>
+                            <div class="item-price">${{ listing.price }}</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <!-- Placeholder items when no listings exist -->
+                    <div class="item-card placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+                    <div class="item-card placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+                    <div class="item-card placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- My Purchases Section -->
+        <div class="purchases-section">
+            <h2 class="section-title">
+                <i class="bi bi-bag"></i>
+                My Purchases
+            </h2>
+            <div class="items-grid">
+                {% for purchase in user_purchases %}
+                    <div class="item-card" onclick="window.location.href=''">
+                        {% if purchase.product.image %}
+                            <img src="{{ purchase.product.image.url }}" alt="{{ purchase.product.name }}">
+                        {% else %}
+                            <i class="bi bi-image"></i>
+                        {% endif %}
+                        <div class="item-overlay">
+                            <div class="item-title">{{ purchase.product.name }}</div>
+                            <div class="item-price">${{ purchase.price }}</div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <!-- Placeholder items when no purchases exist -->
+                    <div class="item-card placeholder">
+                        <i class="bi bi-bag"></i>
+                    </div>
+                    <div class="item-card placeholder">
+                        <i class="bi bi-bag"></i>
+                    </div>
+                    <div class="item-card placeholder">
+                        <i class="bi bi-bag"></i>
+                    </div>
+                    <div class="item-card placeholder">
+                        <i class="bi bi-bag"></i>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add loading state for item cards
+        document.querySelectorAll('.item-card').forEach(card => {
+            if (!card.classList.contains('placeholder') && !card.classList.contains('add-listing-btn')) {
+                card.addEventListener('click', function() {
+                    // Add loading animation
+                    this.style.opacity = '0.7';
+                    this.style.transform = 'scale(0.98)';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
